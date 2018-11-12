@@ -1,0 +1,216 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial BT(3,2); //TX, RX respetively
+String readvoice;
+
+void setup() {
+
+BT.begin(9600);
+Serial.begin(9600);
+
+pinMode(4,OUTPUT);//RED
+pinMode(5,OUTPUT);//RED
+pinMode(6,OUTPUT);//GREEN
+pinMode(7,OUTPUT);//GREEN
+pinMode(8,OUTPUT);//WHITE
+pinMode(9,OUTPUT);//WHITE
+pinMode(10,OUTPUT);
+pinMode(11,OUTPUT);
+pinMode(12,OUTPUT);
+pinMode(13,OUTPUT);
+}
+
+void loop() 
+{
+ while (BT.available())
+ {  //Check if there is an available byte to read
+ delay(10); //Delay added to make thing stable 
+ char c = BT.read(); //Conduct a serial read
+ readvoice += c; //build the string- "forward", "reverse", "left" and "right"
+ }  
+ float t,m,n;
+ int i;
+ if (readvoice.length() > 0) {
+   Serial.println(readvoice);
+   Serial.println("Reading starts..........");
+   if(readvoice == "hot") //ROOM MODE********************************************************* 
+   {
+    digitalWrite(4,HIGH);
+    digitalWrite(5,HIGH);
+digitalWrite(10,HIGH);
+   digitalWrite(11,LOW);
+    digitalWrite(12,LOW);
+     digitalWrite(13,HIGH);
+     delay(1100);
+      digitalWrite(10,LOW);
+       digitalWrite(11,LOW);
+        digitalWrite(12,LOW);
+         digitalWrite(13,LOW);
+                                         delay(900);//waiting for food
+                                         
+                                         //CLOSE
+                                            digitalWrite(10,LOW);
+                                            digitalWrite(11,HIGH);
+                                            digitalWrite(12,HIGH);
+                                            digitalWrite(13,LOW);
+                                            delay(1290);
+                                                      digitalWrite(10,LOW);
+                                                     digitalWrite(11,LOW);
+                                                     digitalWrite(12,LOW);
+                                                     digitalWrite(13,LOW);
+                                                     digitalWrite(4,LOW);
+                                                     digitalWrite(5,LOW);
+    }
+
+     else if(readvoice == "non vegetarian") //ROOM MODE********************************************************* 
+   {
+    digitalWrite(4,HIGH);
+    digitalWrite(5,HIGH);
+digitalWrite(10,HIGH);
+   digitalWrite(11,LOW);
+    digitalWrite(12,LOW);
+     digitalWrite(13,HIGH);
+     delay(1100);
+      digitalWrite(10,LOW);
+       digitalWrite(11,LOW);
+        digitalWrite(12,LOW);
+         digitalWrite(13,LOW);
+                                         delay(900);//waiting for food
+                                         
+                                         //CLOSE
+                                            digitalWrite(10,LOW);
+                                            digitalWrite(11,HIGH);
+                                            digitalWrite(12,HIGH);
+                                            digitalWrite(13,LOW);
+                                            delay(1290);
+                                                      digitalWrite(10,LOW);
+                                                     digitalWrite(11,LOW);
+                                                     digitalWrite(12,LOW);
+                                                     digitalWrite(13,LOW);
+                                                     digitalWrite(4,LOW);
+                                                     digitalWrite(5,LOW);
+    }
+
+
+else if(readvoice=="vegetarian")
+{
+  
+digitalWrite(6,HIGH);
+    digitalWrite(7,HIGH);
+digitalWrite(10,HIGH);
+   digitalWrite(11,LOW);
+    digitalWrite(12,LOW);
+     digitalWrite(13,HIGH);
+     delay(1110);
+      digitalWrite(10,LOW);
+       digitalWrite(11,LOW);
+        digitalWrite(12,LOW);
+         digitalWrite(13,LOW);
+                                         delay(900);//waiting for food
+                                         
+                                         //CLOSE
+                                            digitalWrite(10,LOW);
+                                            digitalWrite(11,HIGH);
+                                            digitalWrite(12,HIGH);
+                                            digitalWrite(13,LOW);
+                                            delay(1290);
+                                                      digitalWrite(10,LOW);
+                                                     digitalWrite(11,LOW);
+                                                     digitalWrite(12,LOW);
+                                                     digitalWrite(13,LOW);
+
+digitalWrite(6,LOW);
+    digitalWrite(7,LOW);
+}
+else if(readvoice=="egg")
+{ digitalWrite(7,HIGH);
+    digitalWrite(6,HIGH);
+digitalWrite(10,HIGH);
+   digitalWrite(11,LOW);
+    digitalWrite(12,LOW);
+     digitalWrite(13,HIGH);
+     delay(1110);
+      digitalWrite(10,LOW);
+       digitalWrite(11,LOW);
+        digitalWrite(12,LOW);
+         digitalWrite(13,LOW);
+                                         delay(900) ;//waiting for food  //CLOSE
+                                            digitalWrite(10,LOW);
+                                            digitalWrite(11,HIGH);
+                                            digitalWrite(12,HIGH);
+                                            digitalWrite(13,LOW);
+                                            delay(1290);
+                                                      digitalWrite(10,LOW);
+                                                     digitalWrite(11,LOW);
+                                                     digitalWrite(12,LOW);
+                                                     digitalWrite(13,LOW);
+
+digitalWrite(6,LOW);
+    digitalWrite(7,LOW);
+   
+}   
+else if(readvoice=="hey")
+{
+ for(int i=0;i<=8;i++)
+ {digitalWrite(5,LOW);
+  digitalWrite(4,HIGH);
+  delay(70);
+   digitalWrite(4,LOW);
+   digitalWrite(5,HIGH);
+   delay(70);
+  } 
+  digitalWrite(4,LOW);
+  digitalWrite(5,LOW);
+}
+
+
+else if(readvoice=="hey steward")
+{
+ for(int i=0;i<=8;i++)
+ {digitalWrite(5,LOW);
+  digitalWrite(4,HIGH);
+  delay(70);
+   digitalWrite(4,LOW);
+   digitalWrite(5,HIGH);
+   delay(70);
+  } 
+  digitalWrite(4,LOW);
+  digitalWrite(5,LOW);
+}
+
+else if(readvoice=="open")
+{
+  digitalWrite(10,HIGH);
+   digitalWrite(11,LOW);
+    digitalWrite(12,LOW);
+     digitalWrite(13,HIGH);
+     delay(1150);
+      digitalWrite(10,LOW);
+       digitalWrite(11,LOW);
+        digitalWrite(12,LOW);
+         digitalWrite(13,LOW);
+}
+else if(readvoice=="close")
+{
+  digitalWrite(10,LOW);
+   digitalWrite(11,HIGH);
+    digitalWrite(12,HIGH);
+     digitalWrite(13,LOW);
+     delay(1200);
+      digitalWrite(10,LOW);
+       digitalWrite(11,LOW);
+        digitalWrite(12,LOW);
+         digitalWrite(13,LOW);}
+        
+         else if(readvoice=="stop")
+         { digitalWrite(10,LOW);
+                                                     digitalWrite(11,LOW);
+                                                     digitalWrite(12,LOW);
+                                                     digitalWrite(13,LOW);}
+                                                     else
+                                                     {Serial.println("no food for you,bitch");}
+  
+ readvoice=""; }
+
+}
+  

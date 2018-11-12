@@ -1,0 +1,148 @@
+#include <ESP8266WiFi.h>
+ 
+const char* ssid = "HUNTLER";
+const char* password = "abhinabganguly";
+ 
+
+WiFiServer server(80);
+ 
+void setup() {
+  Serial.begin(115200);
+  delay(10);
+ 
+  pinMode(D1, OUTPUT);
+   pinMode(D2, OUTPUT);
+    pinMode(D3, OUTPUT);
+     pinMode(D4, OUTPUT);
+ 
+  // Connect to WiFi network
+  Serial.println();
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+ 
+  WiFi.begin(ssid, password);
+ 
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.println("WiFi connected");
+ 
+  // Start the server
+  server.begin();
+  Serial.println("Server started");
+ 
+  // Print the IP address
+  Serial.print("Use this URL to connect: ");
+  Serial.print("http://");
+  Serial.print(WiFi.localIP());
+  Serial.println("/");
+ 
+}
+ 
+void loop() {
+  // Check if a client has connected
+  WiFiClient client = server.available();
+  if (!client) {
+    return;
+  }
+ 
+  // Wait until the client sends some data
+  Serial.println("new client");
+  while(!client.available()){
+    delay(1);
+  }
+ 
+  // Read the first line of the request
+  String request = client.readStringUntil('\r');
+  Serial.println(request);
+  client.flush();
+  int value=0;
+ 
+  // Match the request
+ 
+  if (request.indexOf("/FRONT") != -1)  {
+    digitalWrite(D1, HIGH);
+    digitalWrite(D3,HIGH);
+    digitalWrite(D2,LOW);
+    digitalWrite(D4,LOW);
+    value = 1;
+  }
+  if(request.indexOf("/BACK")!=-1)
+  {
+    digitalWrite(D1,LOW);
+    digitalWrite(D3,LOW);
+    digitalWrite(D2,HIGH);
+    digitalWrite(D4,HIGH);
+  value=2;}
+
+  if(request.indexOf("/RIGHT")!=-1)
+  {
+     digitalWrite(D1,LOW);
+    digitalWrite(D2,LOW);
+    digitalWrite(D3,HIGH);
+    digitalWrite(D4,HIGH);
+    value=3;}
+
+    
+  if(request.indexOf("/LEFT")!=-1)
+  {
+     digitalWrite(D1,HIGH);
+    digitalWrite(D2,HIGH);
+    digitalWrite(D3,LOW);
+    digitalWrite(D4,LOW);
+    value=4;}
+
+     if(request.indexOf("/STOP")!=-1)
+  {
+     digitalWrite(D1,LOW);
+    digitalWrite(D2,LOW);
+    digitalWrite(D3,LOW);
+    digitalWrite(D4,LOW);
+    value=5;}
+ 
+  // Return the response
+  client.println("HTTP/1.1 200 OK");
+  client.println("Content-Type: text/html");
+  client.println(""); //  do not forget this one
+  client.println("<!DOCTYPE HTML>");
+  client.println("<html>");
+ client.println("background-color:blue");
+  client.print("motor towards: ");
+ 
+  if(value == 1) {
+    client.print("Front");
+  } else if(value==2)
+  {
+    client.print("back");
+  }
+  else if(value==3)
+   {
+    client.print("right");
+   }
+
+   else if(value==4)
+    {
+      client.print("left");
+    }
+
+     else if(value==5)
+    {
+      client.print("stop");
+    }
+  client.println("<br><br>");
+  client.println("<a href=\"/FRONT\"\"><button>FRONT </button></a>");
+  client.println("<a href=\"/BACK\"\"><button>BACK </button></a><br />");  
+  client.println("<a href=\"/RIGHT\"\"><button>RIGHT </button></a><br />");
+  client.println("<a href=\"/LEFT\"\"><button>LEFT </button></a><br />");
+   client.println("<a href=\"/STOP\"\"><button>STOP </button></a><br />");
+  
+  client.println("</html>");
+ 
+  delay(1000);
+  Serial.println("Client disonnected");
+  Serial.println("");
+ 
+}
